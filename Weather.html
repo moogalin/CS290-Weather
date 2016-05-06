@@ -1,9 +1,8 @@
 
-
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" author="Megan Aldridge">
     <title>HW Assignment: Open Weather API</title>
     <link rel="stylesheet" type="text/css" href="Weather-Style.css">
 </head>
@@ -11,13 +10,14 @@
 <body>
     <div id="intro">
       <h1> Determine the weather anywhere in the United States</h1>
+      <p> By Megan Aldridge </p>
     </div>
     <p></p>
 
     <div id="forms">
       <h3> Fill location by zip code or city, state: </h3>
       <fieldset id="zip">
-        <legend>Search by zip code</legend>
+        <legend>Search by Zip Code</legend>
           <label for="zipCpde"> Zip Code:</label>
           <input type="text" name="zipCode" id="zipCode" maxlength="10" placeholder="xxxxx" />
           <p></p>
@@ -40,7 +40,7 @@
     </div>
     <p></p>
     <div id="results">
-      <h3> The current weather is: </h3>
+      <h3> The current weather for cities that you've entered: </h3>
       <table>
         <thead>
           <tr>
@@ -55,14 +55,23 @@
         </tbody>
       </table>
       <p></p>
+    </div>
+
+    <p></p>
 
     <div id="submitForm">
-      <form action = "http://httpbin.org/post" method="post">
-
+      <form>
+        <p> Submit to HTTPBin </p>
+        <input type="text" name="data" id="data"/>
+        <input type="submit" id="httpbin" value="submit"/>
+        <p></p>
       </form>
-
-
+      <p></p>
+      <h3> You sent the following data: </h3>
+      <textarea id="returnVal"> </textarea>
+      <p></p>
     </div>
+    <p></p>
 
 
 

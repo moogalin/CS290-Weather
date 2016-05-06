@@ -1,57 +1,76 @@
 
 // Using Open Weather Map API
+/* Resource for onload function and server status syntax:
+ *  Javascript & JQuery by Jon Duckett
+ *  Page 379.
+ */
 
 /* Build URL skeleton for API call */
 var url = 'http://api.openweathermap.org/data/2.5/weather?';
 var apiKey = '&appid=f39710ba306d73251b63bf0fa55f9a21';
 var units = '&units=imperial';
 
+
 document.addEventListener('DOMContentLoaded', bindButtons);
 
 function bindButtons() {
+  // Call weather Function for Zip Code lookup
   document.getElementById('zipSubmit').addEventListener('click', function(event) {
-    weatherByZip(url);
+    weather(url, 'zip');
 
   });
 
+  // Call weather function for City, State lookup
   document.getElementById('citySubmit').addEventListener('click', function(event) {
-    weatherByCity(url);
+    weather(url, 'city');
 
   });
 
-  event.preventDefault();
+  document.getElementById('httpbin').addEventListener('click', function(event) {
+    sendContent();
+  });
 }
 
-function weatherByZip(url) {
-  var zip = document.getElementById('zipCode').value;
-    url = url + 'zip=' + zip + ',us' + units + apiKey;
-    //alert(url);
-    var xhr = new XMLHttpRequest();
 
+function weather(url, val) {
+  var zip = document.getElementById('zipCode').value;
+  var city = document.getElementById('cityName').value;
+  var state = document.getElementById('stateName').value;
+
+  // zip code url
+  if (val === 'zip') {
+    url = url + 'zip=' + zip + ',us' + units + apiKey;
+  }
+
+  // city, state url
+  if (val === 'city') {
+    url = url + 'q=' + city + ',' + state + ',us' + units + apiKey;
+  }
+
+  // new request to Open Weather API
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+
+    // Asynchronous Request
     xhr.onload = function() {
       if(xhr.status === 200) {
         var responseObject = JSON.parse(xhr.responseText);
-        console.log(responseObject);
-        loc = responseObject.name;
 
+        // log request to console
+        console.log(responseObject);
+
+        // Create new row with 3 elements (location, temperature, and humidity of specified Zip / City, St)
         var row = document.getElementById('weatherData');
         var newRow = document.createElement('tr');
         var element1 = document.createElement('td');
         var element2 = document.createElement('td');
         var element3 = document.createElement('td');
 
+        var locText = document.createTextNode(responseObject.name); // Location name
+        var tempText = document.createTextNode(responseObject.main.temp); // Location temperature
+        var humidityText = document.createTextNode(responseObject.main.humidity); // Location humidity
 
-        //var loc = document.getElementById('location');
-        var locText = document.createTextNode(responseObject.name);
-        //var temp = document.getElementById('temperature');
-        var tempText = document.createTextNode(responseObject.main.temp);
-        //var humidity = document.getElementById('humidity');
-        var humidityText = document.createTextNode(responseObject.main.humidity);
-        //loc.appendChild(locText);
-        //temp.appendChild(tempText);
-        //humidity.appendChild(humidityText);
-
-
+        // Append new row information to existing table
         row.appendChild(newRow);
         newRow.appendChild(element1);
         element1.appendChild(locText);
@@ -62,94 +81,37 @@ function weatherByZip(url) {
         newRow.appendChild(element3);
         element3.appendChild(humidityText);
 
-
-
       }
 
     };
 
-    xhr.open('GET', url, true);
+    //xhr.open('GET', url, true);
     xhr.send(null);
-
-
+    event.preventDefault();
 }
 
-function weatherByCity(url) {
-  var city = document.getElementById('cityName').value;
-  var state = document.getElementById('stateName').value;
-    url = url + 'q=' + city + ',' + state + ',us' + units + apiKey;
 
-  //alert(url);
+function sendContent(){
+  // new request to Open Weather API
   var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'http://httpbin.org/post', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
 
-  xhr.onload = function() {
-    if(xhr.status === 200) {
-      var responseObject = JSON.parse(xhr.responseText);
-      console.log(responseObject);
-      loc = responseObject.name;
+    // Asynchronous Request
+    xhr.onload = function() {
+      if(xhr.status === 200) {
+        var responseObject = JSON.parse(xhr.responseText);
+        console.log(responseObject);
 
-      var loc = document.getElementById('location');
-      var locText = document.createTextNode(responseObject.name);
-      var temp = document.getElementById('temperature');
-      var tempText = document.createTextNode(responseObject.main.temp);
-      var humidity = document.getElementById('humidity');
-      var humidityText = document.createTextNode(responseObject.main.humidity);
-      loc.appendChild(locText);
-      temp.appendChild(tempText);
-      humidity.appendChild(humidityText);
+        var response = document.getElementById('returnVal');
+        var responseText = document.createTextNode(responseObject.data);
+        response.appendChild(responseText);
+      }
+    };
 
-    }
+    // Send data submitted by user
+    xhr.send(JSON.stringify(document.getElementById('data').value));
+    event.preventDefault();
 
-  };
-
-  xhr.open('GET', url, true);
-  xhr.send(null);
-}
-
-
-
-
-
-/*
-var url = 'http://api.openweathermap.org/data/2.5/weather?';
-var apiKey = '&appid=f39710ba306d73251b63bf0fa55f9a21';
-var zip = '97229';
-  url = url + 'zip=' + zip + ',us';
-
-
-function weatherByZip(zip, url) {
-  //url = url + 'zip=' + zip + ',us';
 
 }
-
-function weatherByCity(city, url) {
-
-}
-
-url = url + 'q=London,uk';
-url = url + apiKey;
-var xhr = new XMLHttpRequest();
-
-xhr.onload = function() {
-  if(xhr.status === 200) {
-    responseObject = JSON.parse(xhr.responseText);
-    console.log(responseObject);
-  }
-
-};
-
-xhr.open('GET', url, false);
-xhr.send(null);
-*/
-
-
-
-
-
-
-/*
-req.open("POST", "http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=f39710ba306d73251b63bf0fa55f9a21", false);
-req.setRequestHeader('Content-Type', 'application/json');
-req.send(null);
-console.log(JSON.parse(req.responseText));
-*/
