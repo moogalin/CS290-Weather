@@ -1,0 +1,73 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>HW Assignment: Open Weather API</title>
+    <link rel="stylesheet" type="text/css" href="Weather-Style.css">
+</head>
+
+<body>
+    <div id="intro">
+      <h1> Determine the weather anywhere in the United States</h1>
+    </div>
+    <p></p>
+
+    <div id="forms">
+      <h3> Fill location by zip code or city, state: </h3>
+      <fieldset id="zip">
+        <legend>Search by zip code</legend>
+          <label for="zipCpde"> Zip Code:</label>
+          <input type="text" name="zipCode" id="zipCode" maxlength="10" placeholder="xxxxx" />
+          <p></p>
+          <input type="submit" id="zipSubmit"/>
+          <p></p>
+      </fieldset>
+
+      <fieldset id="cityState">
+        <legend>Search by City,St </legend>
+          <label for="cityName"> City Name: </label>
+          <input type="text" name="cityName" id="cityName" maxlength="40" placeholder="City"/>
+          <p></p>
+          <label for="stateName"> State Name: </label>
+          <input type="text" name="stateName" id="stateName" maxlength="40"/ placeholder="St"/>
+          <p></p>
+          <input type="submit" id="citySubmit"/>
+          <p></p>
+      </fieldset>
+
+    </div>
+    <p></p>
+    <div id="results">
+      <h3> The current weather is: </h3>
+      <table>
+        <thead>
+          <tr>
+          <th> City / Neighborhood </th>
+          <th> Current Temperature </th>
+          <th> Percent Humidity </th>
+          </tr>
+        </thead>
+
+        <tbody id = "weatherData">
+
+        </tbody>
+      </table>
+      <p></p>
+
+    <div id="submitForm">
+      <form action = "http://httpbin.org/post" method="post">
+
+      </form>
+
+
+    </div>
+
+
+
+    <script type="text/javascript" src="Weather-Request.js"></script>
+
+
+</body>
+</html>
